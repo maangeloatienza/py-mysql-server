@@ -11,4 +11,4 @@ connect = mysql.connector.connect(
     database = os.getenv("DB_NAME")
 )
 
-cursor = connect.cursor()
+cursor = connect.cursor(dictionary=True)

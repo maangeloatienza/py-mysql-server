@@ -1,12 +1,41 @@
-from database.Database import connect, cursor
-from database.tables.init import Tables
-from database.tables.users import Users
+import wsgiref.simple_server
+import json
+from server.controllers.userController import index
 
-# roleTable = Tables('roles')
-# roleTable.create("role VARCHAR(255), isActive TINYINT(1) DEFAULT 0")
-user = Users()
+def application(environ, start_response):
+    path    = environ['PATH_INFO']
+    method  = environ['REQUEST_METHOD']
+    content_type = "application/json; charset=utf-8"
+    response = dict()
+    status="200 OK"
 
-# user.insert(values=["Mark Angelo", "Atienza", "maangeloatienza@gmail.com", "test"])
+    if path == '/users':
+        if method == 'POST':
+            pass
+        elif method == 'PUT':
+            pass
+        elif method == 'DELETE':
+            pass
+        else:
+            content_type = "application/json"
+            users = index()
+            status = "200 OK" if len(users) else "401 OK"
+            response = json.dumps(users).encode('utf-8')
+            
+    headers = [
+        ("Content-Type",content_type),
+        ("Content-Length",str(len(response)))
+    ]
 
-users = user.findOne(where=f"where id='9432ce47-a0be-46f5-9b42-99922c349009'")
-print(users)
+    start_response(status,headers)
+
+    return [response]
+            
+if __name__ == "__main__":
+    ws = wsgiref.simple_server.make_server(
+        host="localhost",
+        port=8021,
+        app=application
+    )
+
+    ws.serve_forever()
