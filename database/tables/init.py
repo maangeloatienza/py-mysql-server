@@ -1,6 +1,5 @@
 from database.Database import cursor,connect
 
-
 class Tables:
     def __init__(self, table_name):
         self.table_name = table_name
